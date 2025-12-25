@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: main;
+    src: url(./assets/Satoshi-Medium.otf);
+}
+
+
+*
+{
+    font-family: main;
+}
