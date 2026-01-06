@@ -7,7 +7,7 @@ export default function FourthSection() {
       className="relative min-h-screen w-full flex items-center justify-center px-6 sm:px-10 md:px-24 text-center"
       style={{
         backgroundImage:
-          "url('https://images.unsplash.com/photo-1693335624607-dfe2428b361b?q=80&w=3360&auto=format&fit=crop')",
+          "url('https://images.unsplash.com/photo-1562170973-125611988e78?q=80&w=2806&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundAttachment: "fixed",
@@ -25,19 +25,38 @@ export default function FourthSection() {
         >
           Featured Projects
         </h1>
- <button
-          className="mt-10 pl-4 pr-1 py-1 rounded-full
-                     text-[10px] sm:text-xs font-bold tracking-widest
-                     flex items-center gap-3
-                     transition-all duration-300
-                     hover:scale-[1.05]"
-          style={{ backgroundColor: "rgba(255,255,255,0.14)" }}
-        >
-          PROJECTS ATLAS
-          <span className="w-7 h-7 rounded-full flex items-center justify-center bg-white/80">
-            <Plus className="w-3 h-3 text-black" />
-          </span>
-        </button>
+  <button
+              className="
+                mt-6 flex items-center gap-3
+                px-1.5 py-1.5 pl-5 rounded-full
+                bg-white/40 text-white
+               text-xs sm:text-xs font-bold uppercase
+                hover:bg-white/10 transition-all duration-300
+                group
+              "
+            >
+project atlas              {/* ARROW CIRCLE */}
+              <span className="
+                w-10 h-10 rounded-full
+                bg-[#5a5a5a] flex items-center justify-center
+                transition-all duration-300
+                group-hover:bg-[#ffff] 
+              ">
+                <svg
+                  className="w-5 h-5 text-white group-hover:rotate-45  transition-transform duration-300 group-hover:text-black"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2.5}
+                    d="M7 17L17 7M17 7H7M17 7v10"
+                  />
+                </svg>
+              </span>
+            </button>
         {/* Subtitle */}
         <p
           className="mt-6 text-sm md:text-base max-w-xl

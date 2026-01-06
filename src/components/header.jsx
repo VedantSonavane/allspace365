@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Box, Plus, X, ArrowUpRight } from "lucide-react";
 import { gsap } from "gsap";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Change 1: Use useNavigate for cleaner routing
 
 const NAV_DATA = [
   {
@@ -32,9 +32,10 @@ const NAV_DATA = [
 ];
 
 export default function Header() {
+  const navigate = useNavigate(); // Initialize navigation
   const circleRef = useRef(null);
   const menuContentRef = useRef(null);
-  const bgImagesRef = useRef(null); // Ref for the background container
+  const bgImagesRef = useRef(null);
   const navItemsRef = useRef([]);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -57,7 +58,6 @@ export default function Header() {
       display: "block",
     });
 
-    // Reset background container opacity in case it was closed previously
     tl.set(bgImagesRef.current, { opacity: 1 });
 
     tl.to(circleRef.current, {
@@ -78,16 +78,17 @@ export default function Header() {
     );
   };
 
-  const closeMenu = () => {
+  // Rectified: Added a callback 'onDone' to closeMenu
+  const closeMenu = (onDone) => {
     const tl = gsap.timeline({
       onComplete: () => {
         setIsMenuOpen(false);
         setHoveredIndex(null);
         gsap.set(circleRef.current, { display: "none" });
+        if (onDone) onDone(); // Execute navigation after animation
       }
     });
 
-    // 1. Fade out nav items and background images simultaneously
     tl.to(navItemsRef.current, { 
       opacity: 0, 
       y: 40, 
@@ -96,14 +97,12 @@ export default function Header() {
       ease: "power2.in" 
     });
 
-    // 2. Shrink the background images container with the circle
     tl.to(bgImagesRef.current, {
       opacity: 0,
       duration: 0.4,
       ease: "power2.inOut"
     }, "-=0.3");
 
-    // 3. Shrink circle back to the button
     tl.to(circleRef.current, { 
       scale: 0, 
       duration: 0.8, 
@@ -111,8 +110,13 @@ export default function Header() {
     }, "-=0.4");
   };
 
-  const handleLinkClick = () => {
-    closeMenu();
+  // Rectified: Handle navigation logic
+  const handleNavClick = (e, link) => {
+    e.preventDefault(); // Prevent immediate jump
+    closeMenu(() => {
+      navigate(link); // Navigate only after menu animation finishes
+      window.scrollTo(0, 0); // Reset scroll position for the new page
+    });
   };
 
   return (
@@ -124,7 +128,7 @@ export default function Header() {
         style={{ width: "100px", height: "100px", backgroundColor: "#e2e0e0", display: "none" }}
       />
 
-      {/* Background Images Container - Now controlled by GSAP ref */}
+      {/* Background Images Container */}
       <div ref={bgImagesRef} className="fixed inset-0 z-[61] pointer-events-none">
         {NAV_DATA.map((item, idx) => (
           <div
@@ -138,7 +142,6 @@ export default function Header() {
             }}
           />
         ))}
-        {/* Dark Overlay for contrast */}
         <div
           className="absolute inset-0 transition-opacity duration-700"
           style={{
@@ -152,7 +155,7 @@ export default function Header() {
         {isMenuOpen ? (
           <button
             className="w-10 h-10 rounded-full flex items-center justify-center bg-black/5 hover:bg-black/10 transition-all"
-            onClick={closeMenu}
+            onClick={() => closeMenu()}
           >
             <X className={`w-4 h-4 transition-colors duration-300 ${hoveredIndex !== null ? 'text-white' : 'text-[#2e2a2a]'}`} />
           </button>
@@ -192,15 +195,16 @@ export default function Header() {
               ref={el => navItemsRef.current[index] = el}
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
-              onClick={handleLinkClick}
+              onClick={(e) => handleNavClick(e, item.link)} // Use the new handler
               className="py-1 w-fit"
             >
-              <Link to={item.link}>
+              {/* Note: We use a div or button style here because we handle the 'to' via useNavigate */}
+              <div className="cursor-pointer group">
                 <h1
                   className={`
                     text-[2.2rem] sm:text-[3.5rem] lg:text-[4rem]
                     font-bold leading-tight tracking-tighter
-                    cursor-pointer inline-flex items-center gap-2
+                    inline-flex items-center gap-2
                     transition-all duration-500 ease-out transform-gpu origin-left
                     ${hoveredIndex === null
                       ? 'text-[#322f2f] scale-100'
@@ -216,7 +220,7 @@ export default function Header() {
                     className={`transition-all duration-500 transform-gpu ${hoveredIndex === index ? 'opacity-100 translate-x-1 -translate-y-1' : 'opacity-0'}`}
                   />
                 </h1>
-              </Link>
+              </div>
             </div>
           ))}
         </div>

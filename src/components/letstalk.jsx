@@ -89,7 +89,7 @@ const Letstalk = () => {
             <button
               className="
                 mt-12 flex items-center gap-3
-                px-3 py-1.5 pl-5 rounded-full
+                px-1.5 py-1.5 pl-5 rounded-full
                 bg-[#3a3a3a] text-white
                text-xs sm:text-xs font-bold uppercase
                 hover:bg-[#2a2a2a] transition-all duration-300
@@ -103,7 +103,7 @@ const Letstalk = () => {
                 w-10 h-10 rounded-full
                 bg-[#5a5a5a] flex items-center justify-center
                 transition-all duration-300
-                group-hover:bg-[#ffff] group-hover:translate-x-1
+                group-hover:bg-[#ffff] 
               ">
                 <svg
                   className="w-5 h-5 text-white group-hover:rotate-45  transition-transform duration-300 group-hover:text-black"

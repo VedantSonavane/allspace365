@@ -91,9 +91,38 @@ const ArchitectureSection = () => {
             </div>
 
             <div className="pt-4">
-              <button className="group relative px-8 py-3 rounded-full border border-[#2e2a2a]/20 text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase text-[#2e2a2a] overflow-hidden transition-all duration-500 hover:bg-[#2e2a2a] hover:text-white">
-                View Philosophy
-              </button>
+                         <button
+              className="
+                mt-6 flex items-center gap-3
+                px-1.5 py-1.5 pl-5 rounded-full
+                bg-[#3a3a3a] text-white
+               text-xs sm:text-xs font-bold uppercase
+                hover:bg-[#2a2a2a] transition-all duration-300
+                group
+              "
+            >
+view philosophy              {/* ARROW CIRCLE */}
+              <span className="
+                w-10 h-10 rounded-full
+                bg-[#5a5a5a] flex items-center justify-center
+                transition-all duration-300
+                group-hover:bg-[#ffff] 
+              ">
+                <svg
+                  className="w-5 h-5 text-white group-hover:rotate-45  transition-transform duration-300 group-hover:text-black"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2.5}
+                    d="M7 17L17 7M17 7H7M17 7v10"
+                  />
+                </svg>
+              </span>
+            </button>
             </div>
           </div>
         </div>

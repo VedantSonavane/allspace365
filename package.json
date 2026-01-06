@@ -2,6 +2,7 @@
   "dependencies": {
     "clsx": "^2.1.1",
     "cobe": "^0.6.5",
+    "d3": "^7.9.0",
     "dotted-map": "^2.2.3",
     "framer-motion": "^12.23.26",
     "gsap": "^3.14.2",
@@ -13,7 +14,8 @@
     "react-countup": "^6.5.3",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.11.0",
-    "tailwind-merge": "^3.4.0"
+    "tailwind-merge": "^3.4.0",
+    "topojson-client": "^3.1.0"
   },
   "devDependencies": {
     "@types/react": "^19.0.2",

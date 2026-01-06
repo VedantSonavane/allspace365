@@ -1,5 +1,5 @@
 import React from "react";
-import LogoSVG from "../../assets/logo.svg";
+import LogoSVG from "../../assets/LOGO.svg";
 
 export default function HeroSection() {
   return (
@@ -9,11 +9,19 @@ export default function HeroSection() {
     >
       {/* Hero Logo */}
       <div className="flex items-center justify-center flex-wrap z-10">
-        <img
-          src={LogoSVG}
-          alt="Allspace365 Logo"
-          className="w-40 sm:w-64 md:w-80 lg:w-[800px] max-w-full h-auto object-contain"
-        />
+       <img
+  src={LogoSVG}
+  alt="Allspace365 Logo"
+  className="
+    w-[20rem]          /* Mobile / small screens */
+    md:w-[40rem]       /* Normal screens */
+    lg:w-[800px]       /* Fullscreen / large displays */
+    max-w-full
+    h-auto
+    object-contain
+  "
+/>
+
       </div>
 
       {/* Footer Cities */}
