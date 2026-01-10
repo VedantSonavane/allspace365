@@ -38,7 +38,7 @@ const WorkPage = () => {
 
       <section className="w-full mx-auto px-2 md:px-4 py-10">
         <motion.div layout className={`gap-4 transition-all duration-700 ${gridColumns === 2 ? 'columns-1 md:columns-2' : 'columns-2 md:columns-4'}`}>
-          <AnimatePresence mode='wait'>
+          <div mode='wait'>
             {projects.map((project, index) => (
               <motion.div
                 key={project.id}
@@ -74,7 +74,7 @@ const WorkPage = () => {
                 </div>
               </motion.div>
             ))}
-          </AnimatePresence>
+          </div>
         </motion.div>
       </section>
       <Letstalk />
