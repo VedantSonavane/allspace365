@@ -1,5 +1,4 @@
 import React, { useRef, useState } from "react";
-import { NavLink } from "react-router-dom";
 import { Box, Plus, X, ArrowUpRight } from "lucide-react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -18,13 +17,11 @@ export default function Header() {
   const container = useRef();
   const circleRef = useRef(null);
   const menuContentRef = useRef(null);
-  const bgImagesRef = useRef(null);
   const navItemsRef = useRef([]);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
-  // Use contextSafe for events like clicks
   const { contextSafe } = useGSAP({ scope: container });
 
   const openMenu = contextSafe((e) => {
@@ -44,9 +41,9 @@ export default function Header() {
       display: "block",
     })
     .to(circleRef.current, { scale: 60, duration: 1, ease: "expo.inOut" })
-    .to(menuContentRef.current, { opacity: 1, duration: 0.2 }, "-=0.6")
+    .to(menuContentRef.current, { opacity: 1, pointerEvents: "auto", duration: 0.2 }, "-=0.6")
     .fromTo(navItemsRef.current, 
-      { y: 40, opacity: 0 }, 
+      { y: 60, opacity: 0 }, 
       { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: "power4.out" }, 
       "-=0.5"
     );
@@ -62,16 +59,23 @@ export default function Header() {
     });
 
     tl.to(navItemsRef.current, { opacity: 0, y: 40, duration: 0.3, stagger: { each: 0.03, from: "end" } })
-      .to(circleRef.current, { scale: 0, duration: 0.7, ease: "expo.inOut" }, "-=0.2");
+      .to(circleRef.current, { scale: 0, duration: 0.7, ease: "expo.inOut" }, "-=0.2")
+      .to(menuContentRef.current, { opacity: 0, duration: 0.2 }, "-=0.5");
   });
 
   return (
     <div ref={container}>
-      {/* Reveal Circle */}
-      <div ref={circleRef} className="fixed rounded-full pointer-events-none z-[60] bg-[#e2e0e0] w-[100px] h-[100px] hidden" />
+      {/* Reveal Circle Background */}
+      <div 
+        ref={circleRef} 
+        className="fixed rounded-full pointer-events-none z-[60] bg-[#e2e0e0] w-[100px] h-[100px] hidden" 
+      />
 
-      {/* Background Images */}
-      <div ref={bgImagesRef} className="fixed inset-0 z-[61] pointer-events-none transition-opacity duration-500" style={{ opacity: isMenuOpen ? 1 : 0 }}>
+      {/* Hover Background Images */}
+      <div 
+        className="fixed inset-0 z-[61] pointer-events-none transition-opacity duration-700" 
+        style={{ opacity: hoveredIndex !== null ? 1 : 0 }}
+      >
         {NAV_DATA.map((item, idx) => (
           <div
             key={idx}
@@ -82,18 +86,19 @@ export default function Header() {
             }}
           />
         ))}
-        <div className={`absolute inset-0 bg-black/30 transition-opacity ${hoveredIndex !== null ? 'opacity-100' : 'opacity-0'}`} />
+        {/* Dark Overlay for legibility */}
+        <div className="absolute inset-0 bg-black/30" />
       </div>
 
       <header className="fixed top-8 right-8 flex items-center gap-2 z-[100]">
         <button 
           onClick={isMenuOpen ? closeMenu : openMenu}
-          className="w-10 h-10 rounded-full flex items-center justify-center bg-black/5 hover:bg-black/10 transition-all"
+          className="w-10 h-10 rounded-full flex items-center justify-center bg-black/5 hover:bg-black/10 backdrop-blur-sm transition-all"
         >
           {isMenuOpen ? <X className="w-4 h-4" /> : <Box className="w-4 h-4" />}
         </button>
         
-        <button className="pl-4 pr-1 py-1 rounded-full text-xs font-bold tracking-widest flex items-center gap-3 bg-black/5">
+        <button className="pl-4 pr-1 py-1 rounded-full text-xs font-bold tracking-widest flex items-center gap-3 bg-black/5 backdrop-blur-sm">
           LET'S TALK
           <span className="w-8 h-8 rounded-full flex items-center justify-center bg-[#bbb9b9]">
             <Plus className="w-3.5 h-3.5 text-white" />
@@ -102,28 +107,35 @@ export default function Header() {
       </header>
 
       {/* Navigation Overlay */}
-      <div ref={menuContentRef} className={`fixed inset-0 z-[70] flex flex-col justify-center px-24 ${isMenuOpen ? 'pointer-events-auto' : 'pointer-events-none opacity-0'}`}>
-        <nav className="flex flex-col gap-4">
+      <div 
+        ref={menuContentRef} 
+        className={`fixed inset-0 z-[70] flex flex-col justify-center px-24 opacity-0 pointer-events-none`}
+      >
+        <nav className="flex flex-col gap-2">
           {NAV_DATA.map((item, index) => (
-            <NavLink
+            <a
               key={item.title}
-              to={item.link}
-              viewTransition // Logic: Best practice for smooth React transitions
-              onClick={closeMenu}
+              href={item.link}
+              onClick={(e) => {
+                // Optional: prevent default if you want to wait for animation
+                // e.preventDefault(); 
+                closeMenu();
+              }}
               ref={el => navItemsRef.current[index] = el}
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
-              className={({ isActive }) => `
-                group text-[4rem] font-bold tracking-tighter transition-all duration-500
-                ${hoveredIndex === index ? 'text-white translate-x-6' : 'text-[#322f2f]'}
-                ${isActive ? 'underline decoration-1 underline-offset-8' : ''}
+              className={`
+                group w-fit text-[5rem] font-bold tracking-tighter transition-all duration-500 flex items-center gap-6
+                ${hoveredIndex === index ? 'text-white translate-x-8' : 'text-[#322f2f]'}
+                ${hoveredIndex !== null && hoveredIndex !== index ? 'opacity-20 blur-sm' : 'opacity-100'}
               `}
             >
-              <span className="inline-flex items-center gap-4">
-                {item.title}
-                <ArrowUpRight size={40} className={`transition-opacity ${hoveredIndex === index ? 'opacity-100' : 'opacity-0'}`} />
-              </span>
-            </NavLink>
+              {item.title}
+              <ArrowUpRight 
+                size={50} 
+                className={`transition-all duration-500 ${hoveredIndex === index ? 'opacity-100 scale-110' : 'opacity-0 scale-50'}`} 
+              />
+            </a>
           ))}
         </nav>
       </div>

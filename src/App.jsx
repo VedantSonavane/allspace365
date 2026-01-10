@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import { AnimatePresence } from "framer-motion";
 import Header from "./components/header";
 import Footer from "./components/footer";
 
@@ -12,12 +11,25 @@ import Journal from "./pages/journal";
 import Connect from "./pages/collab";
 import PDP from "./pages/PDP";
 
-function AnimatedRoutes() {
+/* 🔍 Route logger – DEBUG ONLY */
+function RouteLogger() {
   const location = useLocation();
 
+  useEffect(() => {
+    console.log("📍 CURRENT ROUTE:", location.pathname);
+  }, [location.pathname]);
+
+  return null;
+}
+
+export default function App() {
   return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
+    <BrowserRouter>
+      <RouteLogger />
+
+      <Header />
+
+      <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/studio" element={<Studio />} />
         <Route path="/work" element={<Work />} />
@@ -25,20 +37,8 @@ function AnimatedRoutes() {
         <Route path="/connect" element={<Connect />} />
         <Route path="/project/:id" element={<PDP />} />
       </Routes>
-    </AnimatePresence>
-  );
-}
 
-export default function App() {
-  return (
-    <BrowserRouter>
-      <div className="App flex flex-col min-h-screen">
-        <Header />
-        <main className="flex-grow">
-          <AnimatedRoutes />
-        </main>
-        <Footer />
-      </div>
+      <Footer />
     </BrowserRouter>
   );
 }
