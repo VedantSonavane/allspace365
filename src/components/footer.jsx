@@ -6,11 +6,21 @@ import {
   Youtube,
   Facebook,
   Linkedin,
-  ExternalLink,
   Music2,
+  ArrowUpRight,
 } from "lucide-react";
 
+import Logo from "../assets/LOGO.svg";
+
 gsap.registerPlugin(ScrollTrigger);
+
+const NAV_DATA = [
+  { title: "Base", link: "/" },
+  { title: "Work", link: "/work" },
+  { title: "Studio", link: "/studio" },
+  { title: "Journal", link: "/journal" },
+  { title: "Collab", link: "/connect" },
+];
 
 const Footer = () => {
   const titleRef = useRef(null);
@@ -28,7 +38,6 @@ const Footer = () => {
           scrollTrigger: {
             trigger: titleRef.current,
             start: "top 85%",
-            toggleActions: "restart none restart none",
           },
         }
       );
@@ -39,123 +48,79 @@ const Footer = () => {
 
   return (
     <footer
-      className="
-        relative w-full overflow-hidden
-        px-5 sm:px-10 md:px-24 
-        py-20 sm:py-28 md:py-32
-      "
+      className="relative w-full overflow-hidden px-6 py-12 md:px-24 border border-t-2"
       style={{ backgroundColor: "#f2f0f0" }}
     >
-      {/* BACKGROUND TITLE */}
-      <h1
+      {/* BACKGROUND LOGO */}
+      <div
         ref={titleRef}
-        className="
-          text-center italic font-bold tracking-tighter leading-none select-none
-          mb-16 sm:mb-20
-        "
-        style={{
-          fontSize: "clamp(3.5rem, 14vw, 14rem)",
-          color: "rgba(46,42,42,0.22)",
-        }}
+        className="flex justify-start pointer-events-none select-none"
       >
-        All Space 365
-      </h1>
+        <img
+          src={Logo}
+          alt="AllSpace365"
+          className="w-[75%] md:w-[80%]"
+        />
+      </div>
 
-      {/* CONTENT */}
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 mb-20">
-        {/* LEFT TEXT */}
-        <p
-          className="
-            text-sm sm:text-base leading-relaxed
-            text-center md:text-left
-            max-w-md mx-auto md:mx-0
-          "
-          style={{ color: "rgba(46,42,42,0.85)" }}
-        >
-          Your global productivity partner delivering tech-smart workforce
-          solutions tailored for your AEC business, ensuring seamless expansion
-          and efficiency.
-        </p>
+      {/* BOTTOM CONTENT */}
+      <div className="mt-24 flex flex-col md:flex-row items-center md:items-end justify-between gap-10">
 
-        {/* RIGHT CONTACT */}
-        <div
-          className="
-            text-sm sm:text-base leading-relaxed
-            text-center md:text-right
-          "
-          style={{ color: "rgba(46,42,42,0.85)" }}
-        >
-          <p className="mb-2 font-medium">
-            <span className="underline underline-offset-4">
-              Call — +91 95991 97669
-            </span>
-          </p>
+        {/* NAV LINKS */}
+        <nav className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-5">
+          {NAV_DATA.map((item) => (
+            <a
+              key={item.title}
+              href={item.link}
+              className="relative group text-lg font-medium"
+              style={{ color: "rgba(46,42,42,0.75)" }}
+            >
+              {item.title}
 
-          <p>
-            1755 Broadway, FRNT 3 #1165
-            <br />
-            New York, NY 10019
-            <br />
-            United States
-          </p>
+              {/* Arrow Hover */}
+              <span
+                className="absolute -top-2 -right-4 opacity-0 scale-75
+                           group-hover:opacity-100 group-hover:scale-100
+                           group-hover:-translate-y-1 group-hover:translate-x-1
+                           transition-all duration-300 ease-out"
+                style={{ color: "#2e2a2a" }}
+              >
+                <ArrowUpRight size={14} />
+              </span>
+
+              {/* Underline */}
+              <span
+                className="absolute left-0 -bottom-1 h-[1px] w-0
+                           group-hover:w-full transition-all duration-300"
+                style={{ backgroundColor: "#2e2a2a" }}
+              />
+            </a>
+          ))}
+        </nav>
+
+        {/* SOCIAL ICONS */}
+        <div className="flex gap-3">
+          {[Instagram, Youtube, Facebook, Linkedin, Music2].map((Icon, i) => (
+            <a
+              key={i}
+              href="#"
+              className="w-10 h-10 flex items-center justify-center rounded-full
+                         transition-transform duration-300 hover:scale-110"
+              style={{
+                backgroundColor: "#2e2a2a",
+                color: "#f2f0f0",
+              }}
+            >
+              <Icon size={16} />
+            </a>
+          ))}
         </div>
       </div>
 
-      {/* LEGAL */}
-      <div className="max-w-4xl mx-auto text-center mb-14 px-4">
-        <p
-          className="text-xs sm:text-sm leading-relaxed"
-          style={{ color: "rgba(46,42,42,0.7)" }}
-        >
-          Please be informed that the intellectual property rights to all the
-          photos, designs and other materials on this site belong to
-          <strong> “YODEZEEN GROUP” LLC</strong>. You may request permission to use
-          them by contacting us at:
-        </p>
-
-        <a
-          href="mailto:contact@yodezeen.com"
-          className="block mt-3 font-medium hover:underline"
-          style={{ color: "#2e2a2a" }}
-        >
-          contact@yodezeen.com
-        </a>
-      </div>
-
-      {/* SOCIAL ICONS */}
-      <div className="flex justify-center flex-wrap gap-4 mb-8">
-        {[
-          Instagram,
-          Youtube,
-          Facebook,
-       
-          Linkedin,
-          Music2,
-        ].map((Icon, i) => (
-          <a
-            key={i}
-            href="#"
-            className="
-              w-11 h-11
-              flex items-center justify-center
-              rounded-full
-              transition-all duration-300
-              hover:scale-110
-            "
-            style={{
-              backgroundColor: "#2e2a2a",
-              color: "#f2f0f0",
-            }}
-          >
-            <Icon size={18} />
-          </a>
-        ))}
-      </div>
-
       {/* COPYRIGHT */}
-      <div className="text-center">
+      <div className="mt-10 text-center">
         <p
-          className="text-xs sm:text-sm"
+          className="text-xs"
           style={{ color: "rgba(46,42,42,0.6)" }}
         >
           © {new Date().getFullYear()} All Space 365. All rights reserved.

@@ -42,7 +42,7 @@ export default function EighthSection() {
   const svgRef = useRef(null);
   const [progress] = useState([0]); 
   const [worldData, setWorldData] = useState([]);
-  const [rotation, setRotation] = useState([0, -15]);
+  const [rotation, setRotation] = useState([0, 0]);
   const [isDragging, setIsDragging] = useState(false);
   const [lastMouse, setLastMouse] = useState([0, 0]);
 
