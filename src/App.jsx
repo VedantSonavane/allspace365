@@ -24,7 +24,6 @@ function ScrollToTop() {
 export default function App() {
   return (
     <BrowserRouter>
-      <RouteLogger />
       <ScrollToTop />
 
       <Header />
