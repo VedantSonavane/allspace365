@@ -1,7 +1,8 @@
 import React, { useRef, useState } from "react";
-import { Box, Plus, X, ArrowUpRight } from "lucide-react";
+import { Box, X, ArrowUpRight } from "lucide-react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
+import { useNavigate } from "react-router-dom"; // ✅ SPA navigation
 
 gsap.registerPlugin(useGSAP);
 
@@ -23,7 +24,9 @@ export default function Header() {
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
   const { contextSafe } = useGSAP({ scope: container });
+  const navigate = useNavigate(); // ✅ React Router hook
 
+  // Open Menu Animation
   const openMenu = contextSafe((e) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
@@ -49,23 +52,33 @@ export default function Header() {
     );
   });
 
+  // Close Menu Animation
   const closeMenu = contextSafe(() => {
-    const tl = gsap.timeline({
-      onComplete: () => {
-        setIsMenuOpen(false);
-        setHoveredIndex(null);
-        gsap.set(circleRef.current, { display: "none" });
-      }
-    });
+    return new Promise((resolve) => {
+      const tl = gsap.timeline({
+        onComplete: () => {
+          setIsMenuOpen(false);
+          setHoveredIndex(null);
+          gsap.set(circleRef.current, { display: "none" });
+          resolve(); // ✅ resolve promise after animation
+        }
+      });
 
-    tl.to(navItemsRef.current, { opacity: 0, y: 20, duration: 0.3, stagger: { each: 0.03, from: "end" } })
-      .to(circleRef.current, { scale: 0, duration: 0.8, ease: "expo.inOut" }, "-=0.2")
-      .to(menuContentRef.current, { opacity: 0, duration: 0.3 }, "-=0.6");
+      tl.to(navItemsRef.current, { opacity: 0, y: 20, duration: 0.3, stagger: { each: 0.03, from: "end" } })
+        .to(circleRef.current, { scale: 0, duration: 0.8, ease: "expo.inOut" }, "-=0.2")
+        .to(menuContentRef.current, { opacity: 0, duration: 0.3 }, "-=0.6");
+    });
   });
+
+  // Handle SPA navigation with animation
+  const handleNavigate = async (link) => {
+    await closeMenu(); // play close animation first
+    navigate(link);    // then navigate
+  };
 
   return (
     <div ref={container} className="antialiased">
-      {/* Reveal Circle Background - Switched to a darker tone for "Minimalist" feel */}
+      {/* Reveal Circle */}
       <div 
         ref={circleRef} 
         className="fixed rounded-full pointer-events-none z-[60] bg-[#1a1a1a] w-[100px] h-[100px] hidden" 
@@ -90,9 +103,7 @@ export default function Header() {
 
       {/* HEADER BAR */}
       <header className="fixed top-0 left-0 w-full px-10 py-8 flex justify-between items-center z-[100]">
-        <div className={`text-sm font-medium tracking-widest transition-colors duration-500 ${isMenuOpen ? 'text-white/50' : 'text-black'}`}>
-            
-        </div>
+        <div className={`text-sm font-medium tracking-widest transition-colors duration-500 ${isMenuOpen ? 'text-white/50' : 'text-black'}`}></div>
 
         <div className="flex items-center gap-8">
             <button 
@@ -107,50 +118,25 @@ export default function Header() {
             
             {!isMenuOpen && (
                <button
-  className="
-    flex items-center gap-3
-    px-1.5 py-1.5 pl-5 rounded-full
-    bg-[#3a3a3a] text-white
-    text-xs tracking-[0.25em] font-bold uppercase
-    hover:bg-[#2a2a2a]
-    transition-all duration-300
-    group
-  "
->
-  LET’S TALK
-
-  {/* ARROW CIRCLE */}
-  <span
-    className="
-      w-9 h-9 rounded-full
-      bg-[#5a5a5a]
-      flex items-center justify-center
-      transition-all duration-300
-      group-hover:bg-white
-    "
-  >
-    <svg
-      className="
-        w-4 h-4
-        text-white
-        transition-all duration-300
-        group-hover:text-black
-        group-hover:rotate-45
-      "
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2.5}
-        d="M7 17L17 7M17 7H7M17 7v10"
-      />
-    </svg>
-  </span>
-</button>
-
+                  className="flex items-center gap-3 px-1.5 py-1.5 pl-5 rounded-full bg-[#3a3a3a] text-white text-xs tracking-[0.25em] font-bold uppercase hover:bg-[#2a2a2a] transition-all duration-300 group"
+                >
+                  LET’S TALK
+                  <span className="w-9 h-9 rounded-full bg-[#5a5a5a] flex items-center justify-center transition-all duration-300 group-hover:bg-white">
+                    <svg
+                      className="w-4 h-4 text-white transition-all duration-300 group-hover:text-black group-hover:rotate-45"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2.5}
+                        d="M7 17L17 7M17 7H7M17 7v10"
+                      />
+                    </svg>
+                  </span>
+                </button>
             )}
         </div>
       </header>
@@ -162,10 +148,9 @@ export default function Header() {
       >
         <nav className="flex flex-col items-start">
           {NAV_DATA.map((item, index) => (
-            <a
+            <button
               key={item.title}
-              href={item.link}
-              onClick={closeMenu}
+              onClick={() => handleNavigate(item.link)} // ✅ SPA navigation with animation
               ref={el => navItemsRef.current[index] = el}
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
@@ -187,11 +172,11 @@ export default function Header() {
                 strokeWidth={1}
                 className={`text-white transition-all duration-500 ${hoveredIndex === index ? 'opacity-100 rotate-0' : 'opacity-0 rotate-45'}`} 
               />
-            </a>
+            </button>
           ))}
         </nav>
 
-        {/* Footer info in menu */}
+        {/* Footer info */}
         <div className="absolute bottom-12 left-10 md:left-32 flex gap-12 text-[10px] tracking-widest text-white/40 uppercase">
             <div>© 2024 Base Studio</div>
             <div className="hover:text-white cursor-pointer transition-colors">Instagram</div>

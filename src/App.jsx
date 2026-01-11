@@ -11,14 +11,13 @@ import Journal from "./pages/journal";
 import Connect from "./pages/collab";
 import PDP from "./pages/PDP";
 
-/* 🔍 Route logger – DEBUG ONLY */
-function RouteLogger() {
+
+/* ⬆ Optional: Scroll to top on route change for SPA */
+function ScrollToTop() {
   const location = useLocation();
-
   useEffect(() => {
-    console.log("📍 CURRENT ROUTE:", location.pathname);
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   }, [location.pathname]);
-
   return null;
 }
 
@@ -26,6 +25,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <RouteLogger />
+      <ScrollToTop />
 
       <Header />
 

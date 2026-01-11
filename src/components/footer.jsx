@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useNavigate } from "react-router-dom"; // ✅ SPA navigation
 import {
   Instagram,
   Youtube,
@@ -24,6 +25,7 @@ const NAV_DATA = [
 
 const Footer = () => {
   const titleRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -45,6 +47,12 @@ const Footer = () => {
 
     return () => ctx.revert();
   }, []);
+
+  // Safe navigation function
+  const handleNavigate = (link) => {
+    // Optional: animate footer links or GSAP effect here
+    navigate(link); // SPA navigation
+  };
 
   return (
     <footer
@@ -69,9 +77,9 @@ const Footer = () => {
         {/* NAV LINKS */}
         <nav className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-5">
           {NAV_DATA.map((item) => (
-            <a
+            <button
               key={item.title}
-              href={item.link}
+              onClick={() => handleNavigate(item.link)} // ✅ SPA navigation
               className="relative group text-lg font-medium"
               style={{ color: "rgba(46,42,42,0.75)" }}
             >
@@ -94,7 +102,7 @@ const Footer = () => {
                            group-hover:w-full transition-all duration-300"
                 style={{ backgroundColor: "#2e2a2a" }}
               />
-            </a>
+            </button>
           ))}
         </nav>
 
