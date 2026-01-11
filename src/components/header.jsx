@@ -99,16 +99,58 @@ export default function Header() {
                 onClick={isMenuOpen ? closeMenu : openMenu}
                 className={`group flex items-center gap-2 transition-colors duration-500 ${isMenuOpen ? 'text-white' : 'text-black'}`}
             >
-                <span className="text-[10px] tracking-[0.2em] font-bold">
-                    {isMenuOpen ? 'CLOSE' : 'EXPLORE'}
+                <span className="text-xs tracking-[0.2em] font-bold">
+                    {isMenuOpen ? 'CLOSE' : 'MENU'}
                 </span>
                 {isMenuOpen ? <X size={18} strokeWidth={1.5} /> : <Box size={18} strokeWidth={1.5} />}
             </button>
             
             {!isMenuOpen && (
-                <button className="text-[10px] tracking-[0.2em] font-bold border-b border-black pb-1 hover:opacity-50 transition-opacity">
-                    LET'S TALK
-                </button>
+               <button
+  className="
+    flex items-center gap-3
+    px-1.5 py-1.5 pl-5 rounded-full
+    bg-[#3a3a3a] text-white
+    text-xs tracking-[0.25em] font-bold uppercase
+    hover:bg-[#2a2a2a]
+    transition-all duration-300
+    group
+  "
+>
+  LET’S TALK
+
+  {/* ARROW CIRCLE */}
+  <span
+    className="
+      w-9 h-9 rounded-full
+      bg-[#5a5a5a]
+      flex items-center justify-center
+      transition-all duration-300
+      group-hover:bg-white
+    "
+  >
+    <svg
+      className="
+        w-4 h-4
+        text-white
+        transition-all duration-300
+        group-hover:text-black
+        group-hover:rotate-45
+      "
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2.5}
+        d="M7 17L17 7M17 7H7M17 7v10"
+      />
+    </svg>
+  </span>
+</button>
+
             )}
         </div>
       </header>

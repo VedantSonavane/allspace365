@@ -5,7 +5,7 @@ import { Cross, Loader } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 // Components
-import SeventhSection from "../components/comoncomp/7thsection";
+import SeventhSection from "../components/homecomp/7thsection";
 import LetsTalk from "../components/letstalk";
 import JoinTeam from "../components/jointeam";
 import Carrers from "../components/carrers";
@@ -114,7 +114,7 @@ const CollaboratePage = () => {
           <div className="flex flex-col justify-end pb-4 lg:pb-0">
             <h1
               ref={textRef}
-              className="text-5xl md:text-7xl lg:text-[6.5rem] font-bold leading-[0.85] uppercase tracking-tighter"
+              className="text-5xl md:text-7xl lg:text-[6.5rem] font-bold leading-[0.85] uppercase tracking-WIDE"
             >
               Let's <br /> Connect
             </h1>
